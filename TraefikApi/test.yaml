@@ -1,6 +1,6 @@
 http:
   routers:
-    emilzackrisson-se:
+    emilzackrissonSe:
       entryPoints:
         - websecure-external
       rule: Host(`emilzackrisson.se`)
@@ -12,7 +12,7 @@ http:
         - websecure-external
       rule: Host(`auth.emilzackrisson.se`)
       service: authentik-kubernetes
-    code-server-unraid:
+    codeServerUnraid:
       entryPoints:
         - websecure-internal
       rule: Host(`code.unraid.local.emilzackrisson.se`)
@@ -38,13 +38,13 @@ http:
         - authentik
         - admin-ipwhitelist
       service: filebrowser
-    home-assistant:
+    homeAssistant:
       entryPoints:
         - websecure-internal
         - websecure-external
       rule: Host(`ha.local.emilzackrisson.se`) || Host(`ha.emilzackrisson.se`)
       service: home-assistant
-    nextcloud-int:
+    nextcloudInt:
       entryPoints:
         - websecure-internal
       rule: Host(`nextcloud.local.emilzackrisson.se`)
@@ -52,7 +52,7 @@ http:
         - nextcloud-redirect
         - nextcloud-middlewares-secure-headers
       service: nextcloud
-    nextcloud-ext:
+    nextcloudExt:
       entryPoints:
         - websecure-external
       rule: Host(`nextcloud.emilzackrisson.se`)
@@ -104,7 +104,7 @@ http:
       middlewares:
         - authentik
       service: dufs
-    filer-local:
+    filerLocal:
       entryPoints:
         - websecure-internal
       rule: Host(`filer.local.emilzackrisson.se`)
@@ -156,14 +156,14 @@ http:
       middlewares:
         - admin-ipwhitelist
       service: whoami
-    whoami-external:
+    whoamiExternal:
       entryPoints:
         - websecure-external
       rule: Host(`whoami.emilzackrisson.se`)
       middlewares:
         - authentik
       service: whoami
-    calibre-web:
+    calibreWeb:
       entryPoints:
         - websecure-external
       rule: Host(`books.emilzackrisson.se`)
@@ -180,7 +180,7 @@ http:
         - websecure-internal
       rule: Host(`infisical.local.emilzackrisson.se`)
       service: infisical
-    cockpit-docker:
+    cockpitDocker:
       entryPoints:
         - websecure-internal
       rule: Host(`cockpit.docker-prod.local.emilzackrisson.se`)
@@ -194,29 +194,20 @@ http:
         - websecure-external
       rule: Host(`lyckebyansfvo.emilzackrisson.se`)
       service: lyckebyansfvo
-    powerdns-admin:
+    powerdnsAdmin:
       entryPoints:
         - websecure-internal
       rule: Host(`pdns.local.emilzackrisson.se`)
       middlewares:
         - admin-ipwhitelist
       service: powerdns-admin
-    test:
-      entryPoints:
-        - string
-      rule: string
-      middlewares:
-        - string
-      service: testService
-      tls:
-        certResolver: string
   services:
-    authentik-kubernetes:
+    authentikKubernetes:
       loadBalancer:
         passHostHeader: true
         servers:
           - url: https://10.10.0.58:9443
-    code-server-unraid:
+    codeServerUnraid:
       loadBalancer:
         passHostHeader: false
         servers:
@@ -231,7 +222,7 @@ http:
         passHostHeader: false
         servers:
           - url: http://10.10.0.20:8080
-    home-assistant:
+    homeAssistant:
       loadBalancer:
         passHostHeader: false
         servers:
@@ -256,7 +247,7 @@ http:
         passHostHeader: false
         servers:
           - url: https://portainer.ingress.kube.local.emilzackrisson.se
-    cockpit-docker-01-prod:
+    cockpitDocker-01Prod:
       loadBalancer:
         passHostHeader: false
         servers:
@@ -306,7 +297,7 @@ http:
         passHostHeader: false
         servers:
           - url: http://10.10.0.8:8054
-    calibre-web:
+    calibreWeb:
       loadBalancer:
         passHostHeader: false
         servers:
@@ -321,7 +312,7 @@ http:
         passHostHeader: false
         servers:
           - url: http://10.10.0.99:8085
-    cockpit-docker:
+    cockpitDocker:
       loadBalancer:
         passHostHeader: false
         servers:
@@ -331,7 +322,7 @@ http:
         passHostHeader: false
         servers:
           - url: https://lyckebyansfvo.ingress.kube.local.emilzackrisson.se
-    powerdns-admin:
+    powerdnsAdmin:
       loadBalancer:
         passHostHeader: false
         servers:
@@ -341,6 +332,14 @@ http:
         passHostHeader: false
         servers:
           - url: 1.1.1.1
+    newApp:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          - url: http://localhost:3000
+  middlewares:
+    nextcloud: ''
+    authentik: ''
 tls:
   options:
     default:
