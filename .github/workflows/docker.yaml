@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           # relative path to the place where source code with Dockerfile is located
-          context: ./
+          context: ./TraefikApi
           # Note: tags has to be all lower-case
           tags: |
             ghcr.io/emilzackrisson/traefikapi:latest
