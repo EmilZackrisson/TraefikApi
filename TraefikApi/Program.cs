@@ -1,5 +1,5 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
 using Traefik;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -90,10 +90,10 @@ app.MapPost("/api/router", (string routerName, Router router) =>
             if (addedRouter)
             {
                 app.Logger.LogInformation("AddRouter: {0}", routerName);
-                return new StatusCodeResult(StatusCodes.Status201Created);
+                return Results.StatusCode(StatusCodes.Status201Created);
             }
             app.Logger.LogError("AddRouter: {0}", "Failed");
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return Results.StatusCode(StatusCodes.Status500InternalServerError);
         }
         catch (Exception e)
         {
@@ -114,10 +114,10 @@ app.MapPost("/api/service", (string serviceName, Service service) =>
         if (addedService)
         {
             app.Logger.LogInformation("AddService: {0}", serviceName);
-            return new StatusCodeResult(StatusCodes.Status201Created);
+            return Results.StatusCode(StatusCodes.Status201Created);
         }
         app.Logger.LogError("AddService: {0}", "Failed");
-        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
     }
     catch (Exception e)
     {
@@ -136,10 +136,10 @@ app.MapPut("/api/router", (string routerName, Router router) =>
             if (updatedRouter)
             {
                 app.Logger.LogInformation("UpdateRouter: {0}", routerName);
-                return new StatusCodeResult(StatusCodes.Status200OK);
+                return Results.StatusCode(StatusCodes.Status204NoContent);
             }
             app.Logger.LogError("UpdateRouter: {0}", "Failed");
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return Results.StatusCode(StatusCodes.Status500InternalServerError);
         }
         catch (Exception e)
         {
@@ -160,10 +160,10 @@ app.MapPut("/api/service", (string serviceName, Service service) =>
         if (updatedService)
         {
             app.Logger.LogInformation("UpdateService: {0}", serviceName);
-            return new StatusCodeResult(StatusCodes.Status200OK);
+            return Results.StatusCode(StatusCodes.Status204NoContent);
         }
         app.Logger.LogError("UpdateService: {0}", "Failed");
-        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
     }
     catch (Exception e)
     {
@@ -176,46 +176,28 @@ app.MapPut("/api/service", (string serviceName, Service service) =>
 
 app.MapDelete("/api/router", (string routerName) =>
     {
-        try
-        {
-            var deletedRouter = traefik.DeleteRouter(routerName);
-            if (deletedRouter)
-            {
-                app.Logger.LogInformation("DeleteRouter: {0}", routerName);
-                return new StatusCodeResult(StatusCodes.Status200OK);
-            }
-            app.Logger.LogError("DeleteRouter: {0}", "Failed");
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        }
-        catch (Exception e)
+        if (!traefik.DeleteRouter(routerName))
         {
             app.Logger.LogError("DeleteRouter: {0}", "Failed");
-            Console.WriteLine(e);
-            throw;
+            return Results.StatusCode(StatusCodes.Status400BadRequest);
         }
-        
+            
+        app.Logger.LogInformation("DeleteRouter: {0}", routerName);
+        return Results.StatusCode(StatusCodes.Status204NoContent);
     })
     .WithName("DeleteRouter")
     .WithOpenApi();
 
 app.MapDelete("/api/service", (string serviceName) =>
     {
-        try
+        if (!traefik.DeleteService(serviceName))
         {
-            var deleteService = traefik.DeleteService(serviceName);
-            if (deleteService)
-            {
-                app.Logger.LogInformation("DeleteService: {0}", serviceName);
-                return new StatusCodeResult(StatusCodes.Status200OK);
-            }
             app.Logger.LogError("DeleteService: {0}", "Failed");
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return Results.StatusCode(StatusCodes.Status400BadRequest);
         }
-        catch (Exception e)
-        {
-            app.Logger.LogError("DeleteService", e);
-            throw;
-        }
+            
+        app.Logger.LogInformation("DeleteService: {0}", serviceName);
+        return Results.StatusCode(StatusCodes.Status204NoContent);
         
     })
     .WithName("DeleteService")
@@ -238,28 +220,34 @@ app.MapPost("/api/save", () =>
     {
         try
         {
-            var saved = traefik.SaveToFile("/Users/emizac/RiderProjects/TraefikApi/TraefikApi/test.yaml");
-            if (saved)
+            if (!traefik.SaveToFile(yamlLocation))
             {
-                app.Logger.LogInformation("SaveToFile: {0}", "Success");
-                return new StatusCodeResult(StatusCodes.Status200OK);
+                app.Logger.LogError("SaveToFile: {0}", "Failed");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
             }
-            app.Logger.LogError("SaveToFile: {0}", "Failed");
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        }
-        catch (Traefik.ConfigurationInvalidExeption e)
-        {
-            Console.WriteLine(e);
-            throw;
+            
+            app.Logger.LogInformation("SaveToFile: {0}", "Success");
+            return Results.StatusCode(StatusCodes.Status204NoContent);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            app.Logger.LogError("SaveToFile: {0}", "Failed");
+            return Results.StatusCode(StatusCodes.Status500InternalServerError);
         }
-        
     })
     .WithName("SaveToFile")
     .WithOpenApi();
+
+app.MapGet("/api/entrypoints", () =>
+{
+    var entrypoints = traefik.GetEntrypoints();
+    var json = JsonSerializer.Serialize(entrypoints, new JsonSerializerOptions()
+    {
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    });
+    app.Logger.LogInformation("GetEntryPoints: {0}", "All");
+    return json;
+});
 
 app.Run();
