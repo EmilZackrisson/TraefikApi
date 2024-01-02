@@ -238,6 +238,24 @@ app.MapPost("/api/save", () =>
     .WithName("SaveToFile")
     .WithOpenApi();
 
+app.MapPost("/api/abort-changes", () =>
+    {
+        try
+        {
+            traefik = new TraefikHelper(yamlLocation);
+            app.Logger.LogInformation("AbortChanges: {0}", "Success");
+            return Results.StatusCode(StatusCodes.Status204NoContent);
+        }
+        catch (Exception e)
+        {
+            app.Logger.LogError("AbortChanges: {0}", "Failed");
+            return Results.StatusCode(StatusCodes.Status500InternalServerError);
+        }
+        
+    })
+    .WithName("AbortChanges")
+    .WithOpenApi();
+
 app.MapGet("/api/entrypoints", () =>
 {
     var entrypoints = traefik.GetEntrypoints();
