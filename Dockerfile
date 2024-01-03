@@ -3,6 +3,9 @@ WORKDIR /app
 EXPOSE 8080
 #EXPOSE 443
 
+ARG GitHub-Username
+ARG GitHub-APIKEY
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["TraefikApi/TraefikApi.csproj", "TraefikApi/"]

@@ -7,6 +7,7 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <PackageLicenseExpression>GPL-3.0</PackageLicenseExpression>
+        
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,11 +21,6 @@
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Traefik">
-        <HintPath>..\..\Traefik\Traefik\bin\Debug\net8.0\Traefik.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+    
 
 </Project>

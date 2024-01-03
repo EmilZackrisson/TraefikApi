@@ -8,9 +8,6 @@ on:
       - '.github/**'
   workflow_dispatch: # run it manually
 
-env:
-  TRAEFIK_YAML_LOCATION: /etc/traefik/traefik.yaml
-
 jobs:
   # define job to build and publish docker image
 
@@ -47,6 +44,9 @@ jobs:
             ghcr.io/emilzackrisson/traefikapi:latest
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/main' }}
+          build-args: |
+            GitHub-Username=${{ github.actor }}
+            GitHub-APIKEY=${{ secrets.GITHUB_TOKEN }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
