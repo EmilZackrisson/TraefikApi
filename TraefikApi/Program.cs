@@ -205,14 +205,23 @@ app.MapDelete("/api/service", (string serviceName) =>
 
 app.MapGet("/api/middleware", () =>
 {
-    var middlewares = traefik.GetMiddlewares();
-    var json = JsonSerializer.Serialize(middlewares, new JsonSerializerOptions()
+    try
     {
-        WriteIndented = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    });
-    app.Logger.LogInformation("GetMiddlewares: {0}", "All");
-    return json;
+        var middlewares = traefik.GetMiddlewares();
+        var json = JsonSerializer.Serialize(middlewares, new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+        app.Logger.LogInformation("GetMiddlewares: {0}", "All");
+        return json;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        throw;
+    }
+    
 });
     
 
@@ -227,11 +236,14 @@ app.MapPost("/api/save", () =>
             }
             
             app.Logger.LogInformation("SaveToFile: {0}", "Success");
+            
+            traefik = new TraefikHelper(yamlLocation); // Reload the file
+            
             return Results.StatusCode(StatusCodes.Status204NoContent);
         }
         catch (Exception e)
         {
-            app.Logger.LogError("SaveToFile: {0}", "Failed");
+            app.Logger.LogError("SaveToFile: {0}", e.Message);
             return Results.StatusCode(StatusCodes.Status500InternalServerError);
         }
     })

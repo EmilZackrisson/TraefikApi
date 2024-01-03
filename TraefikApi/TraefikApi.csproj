@@ -12,7 +12,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-        <PackageReference Include="Traefik" Version="0.0.4.2" />
+        <PackageReference Include="Traefik" Version="0.0.4.6" />
     </ItemGroup>
 
     <ItemGroup>
