@@ -9,7 +9,7 @@ ARG GitHub-APIKEY
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["TraefikApi/TraefikApi.csproj", "TraefikApi/"]
-RUN dotnet restore "TraefikApi/TraefikApi.csproj"
+RUN dotnet restore "TraefikApi/TraefikApi.csproj" --configfile TraefikApi/nuget.config --ignore-failed-sources
 COPY . .
 WORKDIR "/src/TraefikApi"
 RUN dotnet build "TraefikApi.csproj" -c Release -o /app/build
