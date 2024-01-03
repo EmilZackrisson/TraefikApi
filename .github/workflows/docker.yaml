@@ -30,11 +30,11 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           
-      - name: Add source
-        run: |
-          dotnet nuget add source \
-            --username EmilZackrisson --password "${{secrets.GITHUB_TOKEN}}" \
-            --store-password-in-clear-text --name github "https://nuget.pkg.github.com/EmilZackrisson/index.json"
+#      - name: Add source
+#        run: |
+#          dotnet nuget add source \
+#            --username EmilZackrisson --password "${{secrets.GITHUB_TOKEN}}" \
+#            --store-password-in-clear-text --name github "https://nuget.pkg.github.com/EmilZackrisson/index.json"
 
       # setup Docker buld action
       - name: Set up Docker Buildx

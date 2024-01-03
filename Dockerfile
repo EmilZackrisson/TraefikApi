@@ -6,7 +6,8 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["TraefikApi/TraefikApi.csproj", "TraefikApi/"]
-RUN dotnet restore "TraefikApi/TraefikApi.csproj" --ignore-failed-sources --source "https://api.nuget.org/v3/index.json" --source "https://nuget.pkg.github.com/EmilZackrisson/index.json"
+COPY ["TraefikApi/nuget.config", "./"]
+RUN dotnet restore "TraefikApi/TraefikApi.csproj" --source "https://api.nuget.org/v3/index.json" --source "https://nuget.pkg.github.com/EmilZackrisson/index.json" --ignore-failed-sources
 COPY . .
 WORKDIR "/src/TraefikApi"
 RUN dotnet build "TraefikApi.csproj" -c Release -o /app/build
