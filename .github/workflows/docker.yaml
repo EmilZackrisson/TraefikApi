@@ -21,6 +21,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+      - name: Set up Nuget
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+          source-url: https://nuget.pkg.github.com/EmilZackrisson/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       # setup Docker buld action
       - name: Set up Docker Buildx
@@ -44,9 +52,6 @@ jobs:
             ghcr.io/emilzackrisson/traefikapi:latest
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/main' }}
-          build-args: |
-            GitHub-Username=${{ github.actor }}
-            GitHub-APIKEY=${{ secrets.GITHUB_TOKEN }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
