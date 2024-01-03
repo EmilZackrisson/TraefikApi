@@ -15,7 +15,8 @@ jobs:
     name: Build Docker image and push to repositories
     # run only when code is compiling and tests are passing
     runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    permissions:
+      packages: read
 
     # steps to perform in job
     steps:
@@ -58,6 +59,9 @@ jobs:
             ghcr.io/emilzackrisson/traefikapi:latest
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/main' }}
+          build-args: |
+            GitHub-Username=${{ github.actor }}
+            GitHub-APIKEY=${{ secrets.GITHUB_TOKEN }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
