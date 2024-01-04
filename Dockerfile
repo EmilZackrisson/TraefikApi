@@ -7,7 +7,7 @@ ARG GITHUB_TOKEN
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["TraefikApi/TraefikApi.csproj", "TraefikApi/"]
-COPY nuget.config .
+COPY "TraefikApi/nuget.config" "TraefikApi/"
 #RUN dotnet nuget add source "https://nuget.pkg.github.com/EmilZackrisson/index.json" --name "GitHub" --username EmilZackrisson --password $GITHUB_TOKEN --store-password-in-clear-text
 
 # Replace USERNAME and TOKEN in nuget.config with the actual values
