@@ -1,240 +1,245 @@
 http:
   routers:
-    emilzackrisson-se:
-      EntryPoints:
+    emilzackrissonSe:
+      entryPoints:
         - websecure-external
-      Rule: Host(`emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`emilzackrisson.se`)
+      middlewares:
         - emilzackrisson-se-redirect
-      Service: home
+      service: home
     authentik:
-      EntryPoints:
+      entryPoints:
         - websecure-external
-      Rule: Host(`auth.emilzackrisson.se`
-      Middlewares:
-        - authentik
-      Service: authentik-kubernetes
-    code-server-unraid:
-      EntryPoints:
+      rule: Host(`auth.emilzackrisson.se`)
+      service: authentik-kubernetes
+    codeServerUnraid:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`code.unraid.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`code.unraid.local.emilzackrisson.se`)
+      service: code-server-unraid
+      middlewares:
         - authentik
         - admin-ipwhitelist
-      Service: code-server-unraid
-      Tls:
-        CertResolver: letsencrypt
+      tls:
+        certResolver: letsencrypt
     technitium:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`technitium.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`technitium.local.emilzackrisson.se`)
+      service: technitium
+      middlewares:
         - authentik
         - admin-ipwhitelist
-      Service: technitium
     filebrowser:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`filebrowser.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`filebrowser.local.emilzackrisson.se`)
+      service: filebrowser
+      middlewares:
         - authentik
         - admin-ipwhitelist
-      Service: filebrowser
-    home-assistant:
-      EntryPoints:
+    homeAssistant:
+      entryPoints:
         - websecure-internal
         - websecure-external
-      Rule: Host(`ha.local.emilzackrisson.se`) || Host(`ha.emilzackrisson.se`)
-      Service: home-assistant
-    nextcloud-int:
-      EntryPoints:
+      rule: Host(`ha.local.emilzackrisson.se`) || Host(`ha.emilzackrisson.se`)
+      service: home-assistant
+    nextcloudInt:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`nextcloud.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`nextcloud.local.emilzackrisson.se`)
+      service: nextcloud
+      middlewares:
         - nextcloud-redirect
         - nextcloud-middlewares-secure-headers
-      Service: nextcloud
-    nextcloud-ext:
-      EntryPoints:
+    nextcloudExt:
+      entryPoints:
         - websecure-external
-      Rule: Host(`nextcloud.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`nextcloud.emilzackrisson.se`)
+      service: nextcloud
+      middlewares:
         - nextcloud-redirect
         - nextcloud-middlewares-secure-headers
-      Service: nextcloud
     qbittorrent:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`tor.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`tor.local.emilzackrisson.se`)
+      service: qbittorrent
+      middlewares:
         - authentik
         - admin-ipwhitelist
-      Service: qbittorrent
     prx:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`prx.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`prx.local.emilzackrisson.se`)
+      service: prx
+      middlewares:
         - admin-ipwhitelist
-      Service: prx
     portainer:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`portainer.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`portainer.local.emilzackrisson.se`)
+      service: portainer
+      middlewares:
         - portainer-redirect
         - admin-ipwhitelist
-      Service: portainer
     prowlarr:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`prowlarr.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`prowlarr.local.emilzackrisson.se`)
+      service: prowlarr
+      middlewares:
         - authentik
-      Service: prowlarr
     immich:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`immich.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`immich.local.emilzackrisson.se`)
+      service: immich
+      middlewares:
         - maintenance
-      Service: immich
     filer:
-      EntryPoints:
+      entryPoints:
         - websecure-external
-      Rule: Host(`filer.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`filer.emilzackrisson.se`)
+      service: dufs
+      middlewares:
         - authentik
-      Service: dufs
-    filer-local:
-      EntryPoints:
+    filerLocal:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`filer.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`filer.local.emilzackrisson.se`)
+      service: dufs
+      middlewares:
         - authentik
-      Service: dufs
     home:
-      EntryPoints:
+      entryPoints:
         - websecure-external
-      Rule: Host(`home.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`home.emilzackrisson.se`)
+      service: home
+      middlewares:
         - authentik
-      Service: home
     radarr:
-      EntryPoints:
+      entryPoints:
         - websecure-external
-      Rule: Host(`radarr.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`radarr.emilzackrisson.se`)
+      service: radarr
+      middlewares:
         - authentik
         - radarr-theme
-      Service: radarr
     sonarr:
-      EntryPoints:
+      entryPoints:
         - websecure-external
-      Rule: Host(`sonarr.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`sonarr.emilzackrisson.se`)
+      service: sonarr
+      middlewares:
         - authentik
         - sonarr-theme
-      Service: sonarr
     traefik:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`traefik.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`traefik.local.emilzackrisson.se`)
+      service: api@internal
+      middlewares:
         - authentik
         - admin-ipwhitelist
-      Service: api@internal
     bazarr:
-      EntryPoints:
+      entryPoints:
         - websecure-external
-      Rule: Host(`bazarr.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`bazarr.emilzackrisson.se`)
+      service: bazarr
+      middlewares:
         - authentik
-      Service: bazarr
     whoami:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`whoami.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`whoami.local.emilzackrisson.se`)
+      service: whoami
+      middlewares:
         - admin-ipwhitelist
-      Service: whoami
-    whoami-external:
-      EntryPoints:
+    whoamiExternal:
+      entryPoints:
         - websecure-external
-      Rule: Host(`whoami.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`whoami.emilzackrisson.se`)
+      service: whoami
+      middlewares:
         - authentik
-      Service: whoami
-    calibre-web:
-      EntryPoints:
+    calibreWeb:
+      entryPoints:
         - websecure-external
-      Rule: Host(`books.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`books.emilzackrisson.se`)
+      service: calibre-web
+      middlewares:
         - authentik
-      Service: calibre-web
     penpot:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`penpot.local.emilzackrisson.se`)
-      Service: penpot
+      rule: Host(`penpot.local.emilzackrisson.se`)
+      service: penpot
     infisical:
-      EntryPoints:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`infisical.local.emilzackrisson.se`)
-      Service: infisical
-    cockpit-docker:
-      EntryPoints:
+      rule: Host(`infisical.local.emilzackrisson.se`)
+      service: infisical
+    cockpitDocker:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`cockpit.docker-prod.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`cockpit.docker-prod.local.emilzackrisson.se`)
+      service: cockpit-docker
+      middlewares:
         - admin-ipwhitelist
-      Service: cockpit-docker
-      Tls:
-        CertResolver: letsencrypt
+      tls:
+        certResolver: letsencrypt
     lyckebyansfvo:
-      EntryPoints:
+      entryPoints:
         - websecure-external
-      Rule: Host(`lyckebyansfvo.emilzackrisson.se`)
-      Service: lyckebyansfvo
-    powerdns-admin:
-      EntryPoints:
+      rule: Host(`lyckebyansfvo.emilzackrisson.se`)
+      service: lyckebyansfvo
+    powerdnsAdmin:
+      entryPoints:
         - websecure-internal
-      Rule: Host(`pdns.local.emilzackrisson.se`)
-      Middlewares:
+      rule: Host(`pdns.local.emilzackrisson.se`)
+      service: powerdns-admin
+      middlewares:
         - admin-ipwhitelist
-      Service: powerdns-admin
   services:
     authentik-kubernetes:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: https://10.10.0.58:9443
+          - url: ""
     code-server-unraid:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.20:8443
     technitium:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.3:5380
     filebrowser:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.20:8080
     home-assistant:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.21:8119
     nextcloud:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: https://10.10.0.99:8443
     qbittorrent:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:8082
     prx:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: https://10.10.0.19:8006
     portainer:
@@ -244,22 +249,27 @@ http:
           - url: https://portainer.ingress.kube.local.emilzackrisson.se
     cockpit-docker-01-prod:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.132:9090
     prowlarr:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:9696
     immich:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.20:2283
     kasm:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.20:6333
     dufs:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:5000
     home:
@@ -269,34 +279,42 @@ http:
           - url: https://homepage.ingress.kube.local.emilzackrisson.se
     radarr:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:7878
     sonarr:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:8989
     bazarr:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:6767
     whoami:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.8:8054
     calibre-web:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.20:8087
     penpot:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:9002
     infisical:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:8085
     cockpit-docker:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: https://10.10.0.99:9090
     lyckebyansfvo:
@@ -306,33 +324,34 @@ http:
           - url: https://lyckebyansfvo.ingress.kube.local.emilzackrisson.se
     powerdns-admin:
       loadBalancer:
+        passHostHeader: false
         servers:
           - url: http://10.10.0.99:5380
   middlewares:
     securityHeaders:
       headers:
         customResponseHeaders:
-          X-Robots-Tag: none,noarchive,nosnippet,notranslate,noimageindex,noindex,nofollow
-          server: ''
-          X-Forwarded-Proto: https
+          xRobotsTag: none,noarchive,nosnippet,notranslate,noimageindex,noindex,nofollow
+          server: ""
+          xForwardedProto: https
         sslProxyHeaders:
-          X-Forwarded-Proto: https
+          xForwardedProto: https
         referrerPolicy: strict-origin-when-cross-origin
         hostsProxyHeaders:
           - X-Forwarded-Host
           - X-Forwarded-For
         customRequestHeaders:
-          X-Forwarded-Proto: https
-        contentTypeNosniff: true
-        browserXssFilter: true
-        forceSTSHeader: true
-        stsIncludeSubdomains: true
-        stsSeconds: 63072000
-        stsPreload: true
-    crowdsec-bouncer:
+          xForwardedProto: https
+        contentTypeNosniff: "true"
+        browserXssFilter: "true"
+        forceSTSHeader: "true"
+        stsIncludeSubdomains: "true"
+        stsSeconds: "63072000"
+        stsPreload: "true"
+    crowdsecBouncer:
       forwardauth:
         address: http://bouncer-traefik:8080/api/v1/forwardAuth
-        trustForwardHeader: true
+        trustForwardHeader: "true"
 tls:
   options:
     default:

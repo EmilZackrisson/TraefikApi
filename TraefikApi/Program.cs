@@ -27,27 +27,25 @@ if (app.Environment.IsDevelopment())
 var yamlLocation = Environment.GetEnvironmentVariable("TRAEFIK_YAML_LOCATION") ?? "/etc/traefik/traefik.yaml";
 var traefik = new TraefikHelper(yamlLocation);
 
+var jsonSerializerOptions = new JsonSerializerOptions()
+{
+    WriteIndented = true,
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+};
+
 app.MapGet("/api/router", (string? routerName) =>
     {
         if (routerName == null)
         {
             var routers = traefik.GetRouters();
-            var json = JsonSerializer.Serialize(routers, new JsonSerializerOptions()
-            {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var json = JsonSerializer.Serialize(routers, jsonSerializerOptions);
             app.Logger.LogInformation("GetRouter: {0}", "All");
             return json;
         }
         else
         {
             var router = traefik.GetRouter(routerName);
-            var json = JsonSerializer.Serialize(router, new JsonSerializerOptions()
-            {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var json = JsonSerializer.Serialize(router, jsonSerializerOptions);
             app.Logger.LogInformation("GetRouter: {0}", routerName);
             return json;
         }
@@ -61,26 +59,20 @@ app.MapGet("/api/service", (string? serviceName) =>
     if (serviceName == null)
     {
         var services = traefik.GetServices();
-        var json = JsonSerializer.Serialize(services, new JsonSerializerOptions()
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var json = JsonSerializer.Serialize(services, jsonSerializerOptions);
         app.Logger.LogInformation("GetService: {0}", "All");
         return json;
     }
     else
     {
         var service = traefik.GetService(serviceName);
-        var json = JsonSerializer.Serialize(service, new JsonSerializerOptions()
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var json = JsonSerializer.Serialize(service, jsonSerializerOptions);
         app.Logger.LogInformation("GetService: {0}", serviceName);
         return json;
     }
-});
+})
+.WithName("GetService")
+.WithOpenApi();
 
 app.MapPost("/api/router", (string routerName, Router router) =>
     {
@@ -125,8 +117,9 @@ app.MapPost("/api/service", (string serviceName, Service service) =>
         Console.WriteLine(e);
         throw;
     }
-
-});
+})
+    .WithName("AddService")
+    .WithOpenApi();
 
 app.MapPut("/api/router", (string routerName, Router router) =>
     {
@@ -171,8 +164,9 @@ app.MapPut("/api/service", (string serviceName, Service service) =>
         Console.WriteLine(e);
         throw;
     }
-
-});
+})
+    .WithName("UpdateService")
+    .WithOpenApi();
 
 app.MapDelete("/api/router", (string routerName) =>
     {
@@ -221,8 +215,9 @@ app.MapGet("/api/middleware", () =>
         Console.WriteLine(e);
         throw;
     }
-    
-});
+})
+    .WithName("GetMiddlewares")
+    .WithOpenApi();
     
 
 app.MapPost("/api/save", () =>
@@ -278,6 +273,8 @@ app.MapGet("/api/entrypoints", () =>
     });
     app.Logger.LogInformation("GetEntryPoints: {0}", "All");
     return json;
-});
+})
+    .WithName("GetEntryPoints")
+    .WithOpenApi();
 
 app.Run();
