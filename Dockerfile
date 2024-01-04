@@ -13,7 +13,7 @@ COPY "TraefikApi/nuget.config" "TraefikApi/"
 RUN sed -i 's/USERNAME/EmilZackrisson/g' "TraefikApi/nuget.config"
 RUN sed -i 's/TOKEN/'"$GITHUB_TOKEN"'/g' "TraefikApi/nuget.config"
 
-RUN dotnet restore
+RUN dotnet restore "TraefikApi/TraefikApi.csproj" --configfile "TraefikApi/nuget.config"
 COPY . .
 WORKDIR "/src/TraefikApi"
 RUN dotnet build "TraefikApi.csproj" -c Release -o /app/build
